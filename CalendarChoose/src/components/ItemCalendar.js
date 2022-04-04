@@ -96,6 +96,7 @@ export default function ItemCalendar({getValue = ()=>{}}) {
 
 const styles = StyleSheet.create({
   contrainer: {
+    marginTop: 60,
     marginHorizontal: 20,
     borderWidth: 1,
     borderRadius: 5,
