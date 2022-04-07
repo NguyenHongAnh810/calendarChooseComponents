@@ -10,8 +10,8 @@ function daysInMonth(month, year) {
   return new Date(year, month, 0).getDate();
 }
 
-
 const RenderListDay = ({ type = 'Su', start = 1, max = 31, date = 1, setDate = () => { } }) => {
+  const d = new Date()
   const list = []
   for (let i = start; i <= max; i = i + 7) {
     if (i <= 0) {
@@ -29,7 +29,7 @@ const RenderListDay = ({ type = 'Su', start = 1, max = 31, date = 1, setDate = (
       list.push(
         <TouchableOpacity
           style={{
-            // borderWidth: i == date ? 1 : 0,
+            borderWidth: i == d.getDate() ? 1 : 0,
             backgroundColor: i == date ? '#20b2aa' : null,
             borderRadius: 25,
             height: 40,
