@@ -5,23 +5,27 @@ import ItemCalendar from './ItemCalendar';
 export default function CalendarChoose() {
     const [dateTime, setDateTime] = React.useState();
     const [showCalender, setShowCalendar] = React.useState(false);
-    const changValue = (minutes, hour, date, month, year) =>{
+    const changValue = (minutes, hour, date, month, year) => {
         setDateTime(`${hour}:${minutes}  ${date}/${month}/${year}`)
     }
     return (
-        <View>
-            <TextInput
+        <View style={{
+            zIndex: 9999
+        }}>
+            {/* <TextInput
                 style={styles.input}
                 onChangeText={setDateTime}
                 value={dateTime}
-                onFocus = {()=>{
+                onFocus={() => {
                     setShowCalendar(true)
                 }}
-                onBlur = {()=>{
+                onBlur={() => {
                     setShowCalendar(false)
-                }} 
-            />
-            {showCalender? <ItemCalendar getValue = {changValue}/>: null}
+                }}
+            /> */}
+            {/* {showCalender ?  */}
+            <ItemCalendar getValue={changValue} /> 
+             {/* : null} */}
         </View>
     )
 }
@@ -32,5 +36,5 @@ const styles = StyleSheet.create({
         margin: 12,
         borderWidth: 1,
         padding: 10,
-    }
+    },
 })

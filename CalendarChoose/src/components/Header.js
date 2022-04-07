@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/Entypo';
+import { RenderItemChoose } from './RenderChoose';
 
 export const Header = ({year = 2022, month = 1, hour = 0, minites = '00', setMonth = () => { }, setYear = () => {} }) => {
     const deCreaseMonth = () => {
@@ -42,8 +43,10 @@ export const Header = ({year = 2022, month = 1, hour = 0, minites = '00', setMon
 const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
-        marginHorizontal: 30,
-        marginVertical: 10
+        paddingHorizontal: 30,
+        paddingVertical: 10,
+        backgroundColor: '#20b2aa',
+        marginBottom: 10
     },
     headerDay: {
         flexDirection: 'row',

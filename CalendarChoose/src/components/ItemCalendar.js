@@ -16,12 +16,28 @@ const RenderListDay = ({ type = 'Su', start = 1, max = 31, date = 1, setDate = (
   for (let i = start; i <= max; i = i + 7) {
     if (i <= 0) {
       list.push(
-        <Text>-</Text>
+        <View style={{
+          height: 40,
+          width: '100%',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <Text>-</Text>
+        </View>
       )
     } else {
       list.push(
         <TouchableOpacity
-          style={{ borderWidth: i == date ? 1 : 0 }}
+          style={{
+            // borderWidth: i == date ? 1 : 0,
+            backgroundColor: i == date ? '#20b2aa' : null,
+            borderRadius: 25,
+            height: 40,
+            // flexGrow: 1,
+            width: 40,
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
           onPress={() => {
             setDate(i)
           }}>
@@ -38,7 +54,7 @@ const RenderListDay = ({ type = 'Su', start = 1, max = 31, date = 1, setDate = (
   )
 }
 
-export default function ItemCalendar({getValue = ()=>{}}) {
+export default function ItemCalendar({ getValue = () => { } }) {
   const d = new Date()
   const [month, setMonth] = useState(d.getMonth() + 1)
   const [year, setYear] = useState(d.getFullYear())
@@ -75,20 +91,20 @@ export default function ItemCalendar({getValue = ()=>{}}) {
         break;
     }
   }, [startDay])
-  useEffect(()=>{
+  useEffect(() => {
     getValue(minutes, hour, date, month, year)
   }, [minutes, hour, date, month, year])
   return (
     <View style={styles.contrainer}>
       <Header month={month} setMonth={setMonth} year={year} setYear={setYear} hour={hour} minites={minutes} />
       <View style={styles.title}>
-        <RenderListDay type='Su' start={startSu} max={dayInMonth} />
-        <RenderListDay type='Mo' start={startSu + 1} max={dayInMonth} date = {date} setDate={setDate}/>
-        <RenderListDay type='Tu' start={startSu + 2} max={dayInMonth} date = {date} setDate={setDate}/>
-        <RenderListDay type='We' start={startSu + 3} max={dayInMonth} date = {date} setDate={setDate}/>
-        <RenderListDay type='Th' start={startSu + 4} max={dayInMonth} date = {date} setDate={setDate}/>
-        <RenderListDay type='Fr' start={startSu + 5} max={dayInMonth} date = {date} setDate={setDate}/>
-        <RenderListDay type='Sa' start={startSu + 6} max={dayInMonth} date = {date} setDate={setDate}/>
+        <RenderListDay type='Su' start={startSu} max={dayInMonth} date={date} setDate={setDate} />
+        <RenderListDay type='Mo' start={startSu + 1} max={dayInMonth} date={date} setDate={setDate} />
+        <RenderListDay type='Tu' start={startSu + 2} max={dayInMonth} date={date} setDate={setDate} />
+        <RenderListDay type='We' start={startSu + 3} max={dayInMonth} date={date} setDate={setDate} />
+        <RenderListDay type='Th' start={startSu + 4} max={dayInMonth} date={date} setDate={setDate} />
+        <RenderListDay type='Fr' start={startSu + 5} max={dayInMonth} date={date} setDate={setDate} />
+        <RenderListDay type='Sa' start={startSu + 6} max={dayInMonth} date={date} setDate={setDate} />
       </View>
     </View>
   )
@@ -101,13 +117,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     borderColor: 'gray',
-    position: 'absolute'
+    position: 'absolute',
+    zIndex: 10000,
+    borderColor: '#20b2aa',
+    backgroundColor: 'white',
   },
   title: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: 20,
-    marginBottom: 10
+    marginBottom: 10,
   },
   textTitle: {
   }
