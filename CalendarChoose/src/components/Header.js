@@ -1,23 +1,40 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/Entypo';
-import { RenderItemChoose } from './RenderChoose';
+import { useDispatch, useSelector } from 'react-redux'
+import { createObjDateTime } from '../service/model'
+import { getDayInDate, daysInMonth } from '../shared/custom'
+import { addDateTime } from '../store/reducer'
+import RenderChooseYearMonth from './RenderChooseYearMonth';
 
-export const Header = ({year = 2022, month = 1, hour = 0, minites = '00', setMonth = () => { }, setYear = () => {} }) => {
+export const Header = () => {
+    const date = useSelector(state => state.dateTimeDisplay)
+    const dispatch = useDispatch()
+    const month = date.months
     const deCreaseMonth = () => {
         if (month > 1) {
-            setMonth(month - 1)
+            dispatch(addDateTime({
+                name: 'dateTimeDisplay',
+                data: createObjDateTime(date.years, date.months - 1, date.dates, date.hours, date.minitues)
+            }))
         } else {
-            setMonth(12)
-            setYear(year - 1)
+            dispatch(addDateTime({
+                name: 'dateTimeDisplay',
+                data: createObjDateTime(date.years - 1, 12, date.dates, date.hours, date.minitues)
+            }))
         }
     }
     const inCreaseMonth = () => {
         if (month < 12) {
-            setMonth(month + 1)
+            dispatch(addDateTime({
+                name: 'dateTimeDisplay',
+                data: createObjDateTime(date.years, date.months + 1, date.dates, date.hours, date.minitues)
+            }))
         } else {
-            setMonth(1)
-            setYear(year +1)
+            dispatch(addDateTime({
+                name: 'dateTimeDisplay',
+                data: createObjDateTime(date.years + 1, 1, date.dates, date.hours, date.minitues)
+            }))
         }
     }
     return (
@@ -26,14 +43,16 @@ export const Header = ({year = 2022, month = 1, hour = 0, minites = '00', setMon
                 <TouchableOpacity style={{ marginLeft: 20 }} onPress={deCreaseMonth}>
                     <Icon name="chevron-left" size={16} color="black" />
                 </TouchableOpacity >
-                <Text>{month}, {year}</Text>
+                <TouchableOpacity>
+                    <Text>{date.months}, {date.years}</Text>
+                </TouchableOpacity>
                 <TouchableOpacity style={{ marginRight: 20 }} onPress={inCreaseMonth}>
                     <Icon name="chevron-right" size={16} color="black" />
                 </TouchableOpacity>
             </View>
             <View style={{ width: '40%', alignItems: 'center' }}>
                 <TouchableOpacity>
-                <Text>{hour}:{minites}</Text>
+                    <Text>{date.hours}:{date.minitues}</Text>
                 </TouchableOpacity>
             </View>
         </View>

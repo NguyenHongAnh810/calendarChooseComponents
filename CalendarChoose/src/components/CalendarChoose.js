@@ -1,18 +1,20 @@
 import { View, Text, TextInput, StyleSheet, Keyboard } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ItemCalendar from './ItemCalendar';
+import RenderChooseYearMonth from './RenderChooseYearMonth';
 
 export default function CalendarChoose() {
     const [dateTime, setDateTime] = React.useState();
     const [showCalender, setShowCalendar] = React.useState(false);
-    const changValue = (minutes, hour, date, month, year) => {
-        setDateTime(`${hour}:${minutes}  ${date}/${month}/${year}`)
-    }
+    // const changValue = (minutes, hour, date, month, year) => {
+    //     setDateTime(`${hour}:${minutes}  ${date}/${month}/${year}`)
+    // }
+
     return (
         <View style={{
             zIndex: 9999
         }}>
-            {/* <TextInput
+            <TextInput
                 style={styles.input}
                 onChangeText={setDateTime}
                 value={dateTime}
@@ -22,10 +24,11 @@ export default function CalendarChoose() {
                 onBlur={() => {
                     setShowCalendar(false)
                 }}
-            /> */}
+            />
             {/* {showCalender ?  */}
-            <ItemCalendar getValue={changValue} /> 
-             {/* : null} */}
+            <ItemCalendar />
+            <RenderChooseYearMonth/>
+            {/* : null} */}
         </View>
     )
 }

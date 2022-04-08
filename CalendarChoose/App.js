@@ -7,16 +7,15 @@
  */
 
 import React from 'react';
-import {
-  View,
-} from 'react-native';
 import Calendar from './src';
+import {store} from './src/store/store'
+import { Provider } from 'react-redux'
 
 const App = () => {
   return (
-    <View>
+    <Provider store={store}>
       <Calendar />
-    </View>
+    </Provider>
   );
 };
 export default App;

@@ -1,17 +1,17 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Header } from './Header';
+import { useDispatch, useSelector } from 'react-redux'
+import { createObjDateTime } from '../service/model'
+import { getDayInDate, daysInMonth } from '../shared/custom'
+import { addDateTime } from '../store/reducer'
 
-function getDayInDate(day, month, year) {
-  return new Date(year, month - 1, day).getDay()
-}
-
-function daysInMonth(month, year) {
-  return new Date(year, month, 0).getDate();
-}
-
-const RenderListDay = ({ type = 'Su', start = 1, max = 31, date = 1, setDate = () => { } }) => {
-  const d = new Date()
+const RenderListDay = ({ type, start, max }) => {
+  const date = useSelector(state => state)
+  const dispatch = useDispatch()
+  const display = date.dateTimeDisplay
+  const now = date.dateTimeNow
+  const choose = date.dateTimeChoose
   const list = []
   for (let i = start; i <= max; i = i + 7) {
     if (i <= 0) {
@@ -28,18 +28,15 @@ const RenderListDay = ({ type = 'Su', start = 1, max = 31, date = 1, setDate = (
     } else {
       list.push(
         <TouchableOpacity
-          style={{
-            borderWidth: i == d.getDate() ? 1 : 0,
-            backgroundColor: i == date ? '#20b2aa' : null,
-            borderRadius: 25,
-            height: 40,
-            // flexGrow: 1,
-            width: 40,
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
+          style={[styles.bottonCalendar, {
+            borderWidth: display.years == now.years && display.months == now.months && i == now.dates ? 1 : 0,
+            backgroundColor: display.years == choose.years && display.months == choose.months && i == choose.dates ? '#20b2aa' : null,
+          }]}
           onPress={() => {
-            setDate(i)
+            dispatch(addDateTime({
+              name: 'dateTimeChoose',
+              data: createObjDateTime(display.years, display.months, i, display.hours, display.minitues)
+            }))
           }}>
           <Text>{i}</Text>
         </TouchableOpacity>
@@ -54,16 +51,28 @@ const RenderListDay = ({ type = 'Su', start = 1, max = 31, date = 1, setDate = (
   )
 }
 
-export default function ItemCalendar({ getValue = () => { } }) {
+export default function ItemCalendar() {
+  const state = useSelector(state => state)
+  const dispatch = useDispatch()
   const d = new Date()
-  const [month, setMonth] = useState(d.getMonth() + 1)
-  const [year, setYear] = useState(d.getFullYear())
-  const [hour, sethour] = useState(d.getHours())
-  const [minutes, setMinutes] = useState(d.getMinutes())
-  const [date, setDate] = useState(d.getDate())
+  const display = state?.dateTimeDisplay
+  // useEffect(() => {
+  //   dispatch(addDateTime({
+  //     name: 'dateTimeNow',
+  //     data: createObjDateTime(d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(), d.getMinutes())
+  //   }))
+  //   dispatch(addDateTime({
+  //     name: 'dateTimeChoose',
+  //     data: createObjDateTime(d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(), d.getMinutes())
+  //   }))
+  //   dispatch(addDateTime({
+  //     name: 'dateTimeDisplay',
+  //     data: createObjDateTime(d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(), d.getMinutes())
+  //   }))
+  // }, [])
   const [startSu, setStartSu] = useState(0)
-  const startDay = getDayInDate(1, month, d.getFullYear())
-  const dayInMonth = daysInMonth(month, d.getFullYear())
+  const startDay = getDayInDate(1, display?.months, display?.years)
+  const dayInMonth = daysInMonth(display?.months, display?.years)
   useEffect(() => {
     switch (startDay) {
       case 0:
@@ -91,20 +100,17 @@ export default function ItemCalendar({ getValue = () => { } }) {
         break;
     }
   }, [startDay])
-  useEffect(() => {
-    getValue(minutes, hour, date, month, year)
-  }, [minutes, hour, date, month, year])
   return (
     <View style={styles.contrainer}>
-      <Header month={month} setMonth={setMonth} year={year} setYear={setYear} hour={hour} minites={minutes} />
+      <Header/>
       <View style={styles.title}>
-        <RenderListDay type='Su' start={startSu} max={dayInMonth} date={date} setDate={setDate} />
-        <RenderListDay type='Mo' start={startSu + 1} max={dayInMonth} date={date} setDate={setDate} />
-        <RenderListDay type='Tu' start={startSu + 2} max={dayInMonth} date={date} setDate={setDate} />
-        <RenderListDay type='We' start={startSu + 3} max={dayInMonth} date={date} setDate={setDate} />
-        <RenderListDay type='Th' start={startSu + 4} max={dayInMonth} date={date} setDate={setDate} />
-        <RenderListDay type='Fr' start={startSu + 5} max={dayInMonth} date={date} setDate={setDate} />
-        <RenderListDay type='Sa' start={startSu + 6} max={dayInMonth} date={date} setDate={setDate} />
+        <RenderListDay type='Su' start={startSu} max={dayInMonth} />
+        <RenderListDay type='Mo' start={startSu + 1} max={dayInMonth} />
+        <RenderListDay type='Tu' start={startSu + 2} max={dayInMonth} />
+        <RenderListDay type='We' start={startSu + 3} max={dayInMonth} />
+        <RenderListDay type='Th' start={startSu + 4} max={dayInMonth} />
+        <RenderListDay type='Fr' start={startSu + 5} max={dayInMonth} />
+        <RenderListDay type='Sa' start={startSu + 6} max={dayInMonth} />
       </View>
     </View>
   )
@@ -117,8 +123,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     borderColor: 'gray',
-    position: 'absolute',
-    zIndex: 10000,
     borderColor: '#20b2aa',
     backgroundColor: 'white',
   },
@@ -129,5 +133,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   textTitle: {
+  },
+  bottonCalendar: {
+    borderRadius: 25,
+    height: 40,
+    width: 40,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 })
