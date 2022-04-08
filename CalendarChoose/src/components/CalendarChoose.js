@@ -2,13 +2,16 @@ import { View, Text, TextInput, StyleSheet, Keyboard } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import ItemCalendar from './ItemCalendar';
 import RenderChooseYearMonth from './RenderChooseYearMonth';
+import { useDispatch, useSelector } from 'react-redux'
 
 export default function CalendarChoose() {
+    const date = useSelector(state => state)
+    const dispatch = useDispatch()
     const [dateTime, setDateTime] = React.useState();
     const [showCalender, setShowCalendar] = React.useState(false);
-    // const changValue = (minutes, hour, date, month, year) => {
-    //     setDateTime(`${hour}:${minutes}  ${date}/${month}/${year}`)
-    // }
+    const changValue = (minutes, hour, date, month, year) => {
+        setDateTime(`${hour}:${minutes}  ${date}/${month}/${year}`)
+    }
 
     return (
         <View style={{
@@ -27,7 +30,7 @@ export default function CalendarChoose() {
             />
             {/* {showCalender ?  */}
             <ItemCalendar />
-            <RenderChooseYearMonth/>
+            <RenderChooseYearMonth />
             {/* : null} */}
         </View>
     )
